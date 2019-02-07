@@ -123,7 +123,7 @@ public class WeatherService {
 		Dataset<Row> bestTempData = summaryData.groupBy(col("station")).agg(min("temp").alias("average_temp"))
 				.select(col("station").alias("station_best"), col("average_temp"));
 
-		System.out.println("worst year temprature for station");
+		System.out.println("May : worst year temprature for station");
 		Dataset<Row> worstYearData = summaryData
 				.join(worstTempData,
 						summaryData.col("station").eqNullSafe(worstTempData.col("station_worst"))
@@ -133,7 +133,7 @@ public class WeatherService {
 
 		worstYearData.show(40, false);
 
-		System.out.println("best year temprature for station");
+		System.out.println("May : best year temprature for station");
 		Dataset<Row> bestYearData = summaryData
 				.join(bestTempData,
 						summaryData.col("station").eqNullSafe(bestTempData.col("station_best"))
@@ -201,7 +201,7 @@ public class WeatherService {
 	private static void getMaximumSunshine(Dataset<Row> allStationsData) {
 		Dataset<Row> filteredData = allStationsData.agg(max(col("sun")).alias("max_sun"));
 
-		System.out.println("maximum sunshine across all stations");
+		System.out.println("best sunshine across all stations");
 		Dataset<Row> sunshineData = allStationsData
 				.join(filteredData, allStationsData.col("sun").eqNullSafe(filteredData.col("max_sun")))
 				.select(col("station"), col("year"), col("month"), col("sun").alias("Best Sunshine"));
@@ -214,7 +214,7 @@ public class WeatherService {
 
 		Dataset<Row> minSunshineData = filteredData.agg(min(col("sun")).alias("min_sun"));
 
-		System.out.println("minimum sunshine across all stations");
+		System.out.println("worst sunshine across all stations");
 		Dataset<Row> sunshineData = allStationsData
 				.join(minSunshineData, allStationsData.col("sun").eqNullSafe(minSunshineData.col("min_sun")))
 				.select(col("station"), col("year"), col("month"), col("sun").alias("Worst Sunshine"));
@@ -226,7 +226,7 @@ public class WeatherService {
 		Dataset<Row> filteredData = allStationsData.groupBy(col("station")).agg(max(col("sun")).alias("max_sun"))
 				.select(col("station").alias("max_station"), col("max_sun"));
 
-		System.out.println("maximum sunshine per station");
+		System.out.println("best sunshine per station");
 		Dataset<Row> sunshineData = allStationsData
 				.join(filteredData,
 						allStationsData.col("sun").eqNullSafe(filteredData.col("max_sun"))
@@ -243,7 +243,7 @@ public class WeatherService {
 		Dataset<Row> filteredData = minRainData.groupBy(col("station")).agg(min(col("sun")).alias("min_sun"))
 				.select(col("station").alias("min_station"), col("min_sun"));
 
-		System.out.println("minimum sunshine per station");
+		System.out.println("worst sunshine per station");
 		Dataset<Row> sunshineData = allStationsData
 				.join(filteredData,
 						allStationsData.col("sun").eqNullSafe(filteredData.col("min_sun"))
